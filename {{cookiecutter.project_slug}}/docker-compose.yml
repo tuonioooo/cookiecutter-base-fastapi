@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    build: 
+      context: .
+      args:
+        DEV: "true"
+        WORKDIR: "/fastapi-app"  # 设置工作目录
+    image: "{{cookiecutter.project_slug}}-image:1.0"  # 定义镜像名称和标签
+    container_name: {{cookiecutter.project_slug}}  # 自定义容器名称
+    ports:
+      - "8000:8000"
+    environment:
+      - APP_PORT=8000  # 设置端口号
+    env_file:
+      - .env
+    # restart: unless-stopped # 重启策略：除了手动停止，其他情况都会自动重启
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:${APP_PORT:-8000}/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s

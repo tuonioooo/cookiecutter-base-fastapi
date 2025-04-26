@@ -1,2 +1,2 @@
-# cookiecutter-fastapi
-Cookiecutter的fastapi模板
+# cookiecutter-base-fastapi
+Cookiecutter的fastapi基础模板

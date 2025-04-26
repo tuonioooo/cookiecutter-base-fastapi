@@ -1,0 +1,48 @@
+from pathlib import Path
+import shutil
+import subprocess
+
+SUCCESS = "\x1b[1;32m [SUCCESS]: " 
+TERMINATOR = "\x1b[0m"
+INFO = "\x1b[1;33m [INFO]: "
+
+
+def remove_files_and_folders(*paths: str, verbose: bool = False) -> None:
+    for path in paths:
+        p = Path(path)  # 处理 ~ 和相对路径
+        try:
+            if p.is_dir():
+                shutil.rmtree(p)
+                if verbose:
+                    print(f"Deleted directory: {p}")
+            else:
+                p.unlink()
+                if verbose:
+                    print(f"Deleted file: {p}")
+        except Exception as e:
+            print(f"Error deleting {p}: {e}")
+
+
+def main():
+    if "{{ cookiecutter.render_html is defined and cookiecutter.render_html }}" == "n":
+        remove_files_and_folders("app/static", "app/frontend", "app/templates")
+
+    # try to format the code
+    try:
+        print(INFO + "Formatting with black" + TERMINATOR)
+        subprocess.run(("black", "."), capture_output=True)
+        print(INFO + "Formatting with isort" + TERMINATOR)
+        subprocess.run(("isort", "."), capture_output=True)
+    except FileNotFoundError:
+        print("Fail formatting")
+
+    print(SUCCESS + "Project initialized, keep up the good work!" + TERMINATOR)
+    print(
+        INFO
+        + "If you like the project consider dropping a star at https://github.com/Tobi-De/cookiecutter-fastapi"
+        + TERMINATOR
+    )
+
+
+if __name__ == "__main__":
+    main()

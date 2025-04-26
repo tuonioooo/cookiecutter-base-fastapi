@@ -1,0 +1,25 @@
+{
+    "project_name": "Name of the project",
+    "project_slug": "{{ cookiecutter.project_name.lower().replace(' ', '-')|replace('.', '-')|trim() }}",
+    "project_short_description": "A short description of the project",
+    "author": "tuonioooo",
+    "email": "you@example.com",
+    "copyright_year": "{% now 'utc', '%Y' %}",
+    "license":  [
+        "none",
+        "MIT",
+        "GPL-3.0",
+        "Apache-2.0",
+        "Proprietary"
+    ],
+    "release_date": "{% now 'local' %}",
+    "version": "0.1.0",
+    "_render_html": "n",
+    "_copy_without_render": [
+        "*ci.yaml"
+    ],
+    "mail_service": [
+        "Amazon SES",
+        "Other SMTP"
+    ]
+}
