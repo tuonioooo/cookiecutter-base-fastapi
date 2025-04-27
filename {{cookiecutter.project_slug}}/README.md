@@ -67,8 +67,6 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 访问 http://localhost:8000/docs 查看API文档。
 
-4. .env.example 记得转换为 `.env`
-
 
 ## 依赖包说明
 
