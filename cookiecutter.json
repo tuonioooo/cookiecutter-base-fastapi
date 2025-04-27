@@ -8,9 +8,7 @@
     "license":  [
         "none",
         "MIT",
-        "GPL-3.0",
-        "Apache-2.0",
-        "Proprietary"
+        "Apache-2.0"
     ],
     "release_date": "{% now 'local' %}",
     "version": "0.1.0",

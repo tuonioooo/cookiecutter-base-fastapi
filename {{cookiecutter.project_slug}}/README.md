@@ -8,7 +8,7 @@
 - 📝 结构化的日志系统（支持彩色控制台输出、文件滚动存储）
 - ⚙️ 基于pydantic-settings的配置管理
 - 🔍 完整的REST API示例（英雄API的CRUD操作）
-- 🐳 完整的Docker支持
+- 🐳 完整的Docker、Docker Compose支持
 
 ## 项目结构
 
@@ -24,9 +24,16 @@
 │   └── main.py             # 应用入口
 ├── logs                    # 日志存储目录
 ├── .env                    # 环境变量文件
+├── .gitignore              # git忽略文件
+├── .pylintrc               # python语法检测
 ├── docker-compose.yml      # Docker Compose配置
 ├── Dockerfile              # Docker构建文件
+└── main.py                 # 项目入口文件
 └── pyproject.toml          # 项目依赖配置
+└── README.md               # 项目功能介绍
+└── requirements-dev.txt    # 项目开发依赖配置
+└── requirements.txt        # 项目主依赖包配置
+└── uv.lock                 # uv.lock版本控制
 ```
 
 ## 快速开始
@@ -37,32 +44,31 @@
 
 ### 安装
 
-1. 克隆项目
+1. 安装依赖
 
 ```bash
-git clone https://github.com/yourusername/fastapi-base-template.git
-cd fastapi-base-template
+# 安装过的可以忽略uv
+pip install uv
+# 安装主依赖
+uv add -r requirements.txt
 ```
 
-2. 安装依赖
+2. 开发依赖：
 
 ```bash
-pip install -e .
-```
-
-开发环境可以安装额外的开发依赖：
-
-```bash
-pip install -e ".[dev]"
+uv add -r requirements-dev.txt --optional dev
 ```
 
 3. 运行应用
 
 ```bash
-uvicorn app.main:app --reload
+uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
 访问 http://localhost:8000/docs 查看API文档。
+
+4. .env.example 记得转换为 `.env`
+
 
 ## 依赖包说明
 

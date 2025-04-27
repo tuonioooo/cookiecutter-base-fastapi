@@ -4,9 +4,9 @@
 ### 控制台脚本日志输出
    
 ```python
-SUCCESS = "\x1b[1;32m [SUCCESS]: "  # 绿色加粗的 "[SUCCESS]: "
-TERMINATOR = "\x1b[0m"              # 重置终端颜色
-INFO = "\x1b[1;33m [INFO]: "        # 黄色加粗的 "[INFO]: "
+SUCCESS = " \x1b[1;32m [SUCCESS]: "  # 绿色加粗的 "[SUCCESS]: "
+TERMINATOR = " \x1b[0m"              # 重置终端颜色
+INFO = " \x1b[1;33m [INFO]: "        # 黄色加粗的 "[INFO]: "
 ```
 
 ANSI 转义码说明​​  

@@ -46,8 +46,8 @@ class Settings(BaseSettings):
 
     # 基本配置
     model_config = SettingsConfigDict(
-        # 使用顶级.env文件（位于./backend/上一级目录）
-        env_file="../.env",
+        # 使用顶级.env文件（位于./app/上一级目录）
+        env_file=".env",
         env_ignore_empty=True,  # 忽略空环境变量
         extra="ignore",  # 忽略未定义的额外环境变量
     )
@@ -65,7 +65,7 @@ class Settings(BaseSettings):
     CORS_ALLOW_HEADERS: list[str] = ["*"]
 
     # 项目基本信息
-    PROJECT_NAME: str = "default_project_name"  # 项目名称，必须在环境变量中提供
+    PROJECT_NAME: str = "fastapi-template"  # 项目名称，必须在环境变量中提供
     SENTRY_DSN: HttpUrl | None = None  # Sentry错误追踪服务地址，可选
 
     
