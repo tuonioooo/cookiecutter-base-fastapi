@@ -1,7 +1,7 @@
 # ----------------------------
 # 第一阶段：基础环境  
 # ----------------------------
-FROM python:3.12.3-slim-bookworm AS base
+FROM python:3.11.12-slim-bookworm AS base
 
 # 全局环境变量，多阶段共享
 ENV PYTHONUNBUFFERED=1 \
@@ -51,19 +51,26 @@ ARG WORKDIR=/fastapi-app
 
 WORKDIR ${WORKDIR}
 
-# 定义非 root 用户名
+# 定义非 root 用户名和 UID/GID
+# 这里的 UID 和 GID 是为了避免和宿主机冲突，建议使用 1000 以上的 UID/GID
 ARG USER_NAME=appuser
-# 安全配置
-RUN useradd -m ${USER_NAME} && chown -R ${USER_NAME}:${USER_NAME} ${WORKDIR}
+ARG USER_UID=1001
+ARG USER_GID=1001
+
+# 创建用户和组并授予权限
+RUN groupadd -g ${USER_GID} ${USER_NAME} && \
+    useradd -m -u ${USER_UID} -g ${USER_GID} ${USER_NAME} && \
+    chown -R ${USER_UID}:${USER_GID} ${WORKDIR}
+
 # 设置非 root 用户
 USER ${USER_NAME}
 
 # 从builder复制已安装的包并强制转移所有全
 # 显式复制可执行文件
 COPY --from=builder /usr/local/bin/uvicorn /usr/local/bin/  
-COPY --from=builder --chown=${USER_NAME}:${USER_NAME} /usr/local/lib/python3.12/site-packages /usr/local/lib/python3.12/site-packages
+COPY --from=builder --chown=${USER_UID}:${USER_GID} /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 # 复制应用代码
-COPY --chown=${USER_NAME}:${USER_NAME} . .
+COPY --chown=${USER_UID}:${USER_GID} . .
 
 
 ENV PYTHONPATH="${PYTHONPATH}:/app:${WORKDIR}:."
