@@ -5,6 +5,10 @@
     "author": "tuonioooo",
     "email": "you@example.com",
     "copyright_year": "{% now 'utc', '%Y' %}",
+    "python_version": [
+        "3.12",
+        "3.11"
+    ],
     "license":  [
         "none",
         "MIT",

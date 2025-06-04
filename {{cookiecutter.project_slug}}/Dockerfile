@@ -1,7 +1,12 @@
 # ----------------------------
 # 第一阶段：基础环境  
 # ----------------------------
-FROM python:3.11.12-slim-bookworm AS base
+{% if cookiecutter.python_version == '3.11' -%} 
+FROM python:3.11.12-slim-bookworm AS base 
+{%- endif %}
+{% if cookiecutter.python_version == '3.12' -%} 
+FROM python:3.12.10-slim-bookworm AS base 
+{%- endif %}
 
 # 全局环境变量，多阶段共享
 ENV PYTHONUNBUFFERED=1 \
