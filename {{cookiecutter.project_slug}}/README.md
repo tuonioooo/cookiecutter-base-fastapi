@@ -65,6 +65,14 @@ uv add -r requirements-dev.txt --optional dev
 uvicorn main:app --reload --host 0.0.0.0 --port 8000
 ```
 
+4.编译依赖便于生产部署
+
+```bash
+uv pip compile pyproject.toml -o uv.linux.lock
+```
+
+
+
 访问 http://localhost:8000/docs 查看API文档。
 
 

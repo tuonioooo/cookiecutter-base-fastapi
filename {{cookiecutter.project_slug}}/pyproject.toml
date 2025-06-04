@@ -14,6 +14,9 @@ dependencies = [
     "pydantic-settings>=2.9.1",
     "fastapi[standard]>=0.115.12",
     "httpcore==1.0.7",
+    "redis>=4.2.0",
+    "sqlalchemy>=2.0.41",
+    "sqlmodel>=0.0.24",
 ]
 
 

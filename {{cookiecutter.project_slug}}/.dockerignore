@@ -84,13 +84,13 @@ docs/
 # ===========================
 # 环境配置文件
 # ===========================
-.env
-.env.*
-*.env.*
-.envrc
-.env.local
-.env.test
-.env.production
+# .env
+# .env.*
+# *.env.*
+# .envrc
+# .env.local
+# .env.test
+# .env.production
 
 
 # ===========================
