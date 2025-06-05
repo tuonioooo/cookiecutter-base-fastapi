@@ -1,39 +1,37 @@
 # {{cookiecutter.project_slug}}
 
-一个基于FastAPI的基础项目模板，提供了完整的项目结构、日志配置、环境变量管理和API示例。
+基于FastAPI的高性能Web应用项目模板，提供完整的项目结构和开发基础。
 
-## 特性
+## 核心特性
 
+- 📦 完整的项目结构和最佳实践
 - 🚀 基于FastAPI的高性能API框架
-- 📝 结构化的日志系统（支持彩色控制台输出、文件滚动存储）
+- 📝 结构化的日志系统（彩色控制台输出、文件滚动存储）
 - ⚙️ 基于pydantic-settings的配置管理
-- 🔍 完整的REST API示例（英雄API的CRUD操作）
-- 🐳 完整的Docker、Docker Compose支持
+- 🗄️ SQLModel/SQLAlchemy ORM数据库支持
+- 🔍 完整的REST API示例
+- 🐳 Docker和Docker Compose支持
 
 ## 项目结构
 
 ```
 ├── app
 │   ├── api                 # API路由模块
-│   │   └── hero.py         # 英雄管理API示例
 │   ├── core                # 核心功能模块
 │   │   ├── config.py       # 配置管理
-│   │   └── logger.py       # 日志配置
+│   │   ├── logger.py       # 日志配置
+│   │   └── database        # 数据库相关
 │   ├── models              # 数据模型
-│   │   └── hero.py         # 英雄模型示例
+│   ├── middleware          # 中间件
 │   └── main.py             # 应用入口
-├── logs                    # 日志存储目录
-├── .env                    # 环境变量文件
-├── .gitignore              # git忽略文件
-├── .pylintrc               # python语法检测
+├── scripts                 # 脚本目录
+├── tests                   # 测试目录
+├── .env.example            # 环境变量示例
 ├── docker-compose.yml      # Docker Compose配置
 ├── Dockerfile              # Docker构建文件
-└── main.py                 # 项目入口文件
-└── pyproject.toml          # 项目依赖配置
-└── README.md               # 项目功能介绍
-└── requirements-dev.txt    # 项目开发依赖配置
-└── requirements.txt        # 项目主依赖包配置
-└── uv.lock                 # uv.lock版本控制
+├── pyproject.toml          # 项目依赖配置
+├── requirements.txt        # 项目依赖
+└── requirements-dev.txt    # 开发依赖
 ```
 
 ## 快速开始
@@ -42,14 +40,12 @@
 
 - Python 3.11+
 
-### 安装
+### 安装依赖
 
-#### 手动
-
-1. 安装依赖
+#### 手动安装
 
 ```bash
-# 安装过的可以忽略uv
+# 使用uv安装依赖
 pip install uv
 # 安装主依赖
 uv add -r requirements.txt
@@ -57,114 +53,65 @@ uv add -r requirements.txt
 uv add -r requirements-dev.txt --optional dev
 ```
 
-2. 运行应用
-
-```bash
-# powershell 激活虚拟环境
-.venv\Scripts\Activate.ps1
-# bash
-source .venv/Scripts/activate
-# 启动命令
-uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-```
-
-3.编译依赖便于生产部署
-
-```bash
-uv pip compile pyproject.toml -o uv.linux.lock
-```
-
-#### 脚本启动
-
+#### 脚本安装
 
 ```bash
 chmod +x scripts/start.sh
 ./scripts/start.sh
 ```
 
+### 运行应用
 
+```bash
+# 激活虚拟环境
+# Windows (PowerShell)
+.venv\Scripts\Activate.ps1
+# Linux/macOS
+source .venv/bin/activate
+
+# 启动应用
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### 编译依赖（生产部署）
+
+```bash
+uv pip compile pyproject.toml -o uv.linux.lock
+```
 
 访问 http://localhost:8000/docs 查看API文档。
-
-
-## 依赖包说明
-
-- **fastapi[standard]**: 高性能API框架，包含标准依赖
-- **uvicorn**: ASGI服务器，用于运行FastAPI应用
-- **pydantic**: 数据验证和设置管理
-- **pydantic-settings**: 基于pydantic的配置管理
-- **requests**: HTTP客户端库
-- **python-dotenv**: 环境变量管理
-- **colorlog**: 彩色日志输出支持
-
-### 开发依赖
-
-- **pytest**: 测试框架
-- **black**: 代码格式化工具
-- **autopep8**: 代码格式化工具
-- **ipdb**: 增强调试工具
-- **pylint**: 代码静态分析工具
 
 ## 主要功能
 
 ### 配置管理
 
-通过 `app/core/config.py` 使用 `pydantic-settings` 管理应用配置，支持从环境变量和 `.env` 文件加载配置。
-
-```python
-# 示例环境变量（.env文件）
-LOG_LEVEL=INFO
-PROJECT_NAME=my-fastapi-app
-ENVIRONMENT=local
-```
+通过`app/core/config.py`使用pydantic-settings管理应用配置，支持从环境变量和`.env`文件加载配置。
 
 ### 日志系统
 
-项目集成了强大的日志系统，支持:
-
+集成了强大的日志系统，支持：
 - 彩色控制台输出
 - 按时间和大小滚动的文件日志
 - 可自定义日志级别
-- 详细说明：[logger.md](./docs/logger.md)
 
-日志配置在 `app/core/logger.py` 中定义。
+### 数据库支持
 
-### API示例
+- 默认使用SQLite，便于开发
+- 支持PostgreSQL和MySQL
+- 基于SQLModel的ORM支持
 
-项目包含一个完整的英雄管理API示例，演示了:
+### Docker支持
 
-- 资源的CRUD操作
-- 查询参数处理
-- 请求和响应模型验证
-- 错误处理
-
-## Docker支持
-
-* [Dockerfile](./Dockerfile)
-* [docker-compose.yml](./docker-compose.yml)
+提供完整的Docker和Docker Compose配置，方便部署和开发。
 
 ## 开发指南
 
 ### 添加新的API路由
 
-1. 在 `app/api` 目录中创建新的路由模块
-2. 在 `app/models` 目录中创建相应的数据模型
-3. 将路由导入并注册到 `app/main.py`
-
-### 配置日志
-
-可以通过环境变量调整日志级别：
-
-```
-LOG_LEVEL=DEBUG
-```
-
-支持的日志级别: DEBUG, INFO, WARNING, ERROR, CRITICAL
-
-## 贡献
-
-欢迎提交问题和拉取请求！
+1. 在`app/api`目录中创建新的路由模块
+2. 在`app/models`目录中创建相应的数据模型
+3. 将路由导入并注册到`app/api/__init__.py`
 
 ## 许可
 
-[MIT](LICENSE)
+[{{cookiecutter.license}}](LICENSE)

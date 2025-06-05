@@ -142,6 +142,15 @@ install_dependencies() {
         log_error "开发依赖安装失败"
         exit 1
     fi
+
+    log_info "生成编译依赖..."
+    if uv pip compile pyproject.toml -o uv.linux.lock; then
+        log_success "编译依赖生成成功"
+    else
+        log_error "编译依赖生成失败"
+        exit 1
+    fi
+    
 }
 
 # 激活虚拟环境

@@ -14,6 +14,10 @@ Cookiecutter是一个命令行工具(CLI)，用于从模板创建项目脚手架
 
 🔍 [Cookiecutter](https://github.com/cookiecutter/cookiecutter)
 
+常用语法：
+
+[docs/cookiecutter.md](docs/cookiecutter.md)
+
 ### 安装
 
 使用 pip 包管理器安装 cookiecutter，安装选项如下：
