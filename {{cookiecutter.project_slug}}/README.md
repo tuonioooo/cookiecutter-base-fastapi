@@ -44,6 +44,8 @@
 
 ### 安装
 
+#### 手动
+
 1. 安装依赖
 
 ```bash
@@ -70,6 +72,14 @@ uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 
 ```bash
 uv pip compile pyproject.toml -o uv.linux.lock
+```
+
+#### 脚本启动
+
+
+```bash
+chmod +x scripts/start.sh
+./scripts/start.sh
 ```
 
 
