@@ -1,0 +1,152 @@
+{% raw %}
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Python 项目编码规范
+
+## 项目结构
+- 使用模块化设计，将代码组织在 `app` 目录下
+- API路由定义在 `app/api` 目录
+- 核心业务逻辑放在 `app/core` 目录
+    - redis `app/core/redis.py`         // redis客户端
+    - database `app/core/database`      // database 数据库管理
+    - response `app/core/response.py`   // 接口响应统一类
+    - crud     `app/core/crud.py`       // 统一的crud模版
+    - config   `app/core/config.py`     // 统一系统配置管理
+- 中间件定义在 `app/middleware` 目录
+- 请求/响应模型定义在 `app/schemas` 目录
+- 工具类和辅助函数放在 `app/utils` 目录
+- 测试函数定义在 `tests` 目录
+- 复杂的业务处理，放到 `app/service` 目录
+- 数据模型定义在 `app/models` 目录
+
+## API设计
+- API路由使用FastAPI，包含summary和文档字符串
+- 路由命名格式, path替换为实际的业务路径
+    ```python
+    router = APIRouter(
+        prefix="/path",
+        tags=["xxx"],
+    )
+    ```
+- 路由函数必须有详细注释（功能、参数、返回值、注意事项）
+- 直接引入 `db: DbSessionDep` 作为依赖注入获取数据库会话, 放在接口第一个参数，来自于 `app/core/database`, 已经依赖声明过了，无需重复声明
+- 响应统一使用success()和fail()格式化，并返回
+  - 使用 `success(data=model.model_dump(mode='json'))` 避免 `Object of type XXX is not JSON serializable` 错误
+  - 对于列表返回，使用 `task_list = [task.model_dump(mode='json') for task in tasks]` 进行转换
+- API路径遵循RESTful设计风格
+- 必须在 `app/api/__init__.py` 注册路由
+- 接口路径匹配规则注意优先级，避免发生如：访问 `/ui` 会匹配到 `/{task_id}` 的问题，可以使用 `/web/ui` 或其他前缀区分
+
+## 模型规范
+- 使用Pydantic定义请求/响应模型
+- 使用SQLModel定义数据库模型
+- 字段必须用Field()添加中文描述
+- 提供model_config示例数据
+- 复杂模型放在schemas目录
+- 使用类型注解提高代码可读性
+- 模型类定义规则如下:
+  ```python
+  class Example(BaseSqlModel, IntIDMixin, table=True):
+  ```
+  或
+  ```python
+  class Example(BaseSqlModel, UUIDIDHexMixin, table=True):
+  ```
+  或
+  ```python
+  class Example(BaseSqlModel, StrMixin, table=True):
+  ```
+  或完全自定义
+  ```python
+  class Example(SQLModel, table=True):
+  ```
+
+- SQLModel模型字段定义规范：
+  ```python
+  field_name: str = Field(
+      sa_column=Column(String(100), primary_key=True, index=True, comment="字段说明")
+  )
+  ```
+
+- 日期类型字段序列化方法：
+  ```python
+  @field_serializer('created_at', 'updated_at', 'completed_at', when_used='json')
+  def serialize_datetime(self, value: datetime):
+      """
+      自动序列化时间
+      :param value:
+      :return:
+      """
+      if value is None:
+          return None
+      return value.strftime('%Y/%m/%d %H:%M:%S')
+  ```
+
+- 模型序列化注意事项:
+  1. 模型转换为字典时，使用 `model.model_dump(mode='json')`，自动处理datetime格式
+  2. 列表模型转换：`[item.model_dump(mode='json') for item in items]`
+  3. 可以继承`BaseSqlModel`获取默认序列化方法
+
+## SQLModel使用规范
+- 使用SQLModel替代SQLAlchemy ORM，简化模型定义
+- 模型定义添加`table=True`参数表示数据库表
+- 字段类型使用Python类型注解，如`str`, `int`, `datetime`等
+- 使用`sa_column`参数定义SQLAlchemy特有属性
+- 主键定义示例：`id: int = Field(default=None, primary_key=True)`
+- 外键定义示例：`team_id: Optional[int] = Field(default=None, foreign_key="team.id")`
+- 关系定义使用Relationship：`team: Optional["Team"] = Relationship(back_populates="heroes")`
+
+## 错误处理
+- try-except包装外部调用
+- 统一错误处理和日志记录
+- 使用前缀标记：✅成功 ❌错误
+- 敏感操作添加警告注释
+- 对可能失败的操作提供详细错误信息
+- 数据库操作必须包含异常处理和回滚
+
+## 数据库操作
+- 使用SQLModel进行数据库交互
+- 事务操作必须异常处理和回滚
+- 查询优化，避免N+1问题
+- 分页查询大数据集
+- 使用异步会话处理高并发场景
+- 使用DbSessionDep依赖注入数据库会话
+
+## 前端页面
+- static目录用于存放静态的图片、css等资源
+- templates目录用于存储html模版
+- 输出模版参考 `app/core/response.py` 中的 `html_response_welcome` 方法
+- 前端页面技术栈：`HTML + Tailwind CSS + Alpine.js + Animate.css`
+- 构建响应式界面，适配移动端和桌面端
+- 使用Alpine.js处理前端交互逻辑
+- 使用Animate.css添加动画效果
+
+## Docker规范
+- 使用多阶段构建减小镜像体积
+- 非root用户运行应用
+- 设置健康检查
+- 使用锁定文件确保依赖版本一致
+- 环境变量配置外部化
+- 容器内日志输出到stdout和stderr
+
+## 代码格式化
+- 使用black格式化代码
+- 导入顺序：标准库、第三方库、本地模块
+- 使用类型注解增强代码可读性
+- 函数和方法添加类型提示
+- 变量命名使用小写下划线风格(snake_case)
+- 常量使用大写字母和下划线
+
+## 测试规范
+- 单元测试覆盖核心功能
+- 使用pytest进行测试
+- 模拟外部依赖
+- 测试数据使用工厂模式生成
+- API测试使用TestClient
+- 测试数据库使用SQLite内存数据库
+- 测试前后进行数据清理
+- 继承目录 `tests/test_base` 中的 `TestBase` 来实现默认的测试类配置
+{% endraw %}
