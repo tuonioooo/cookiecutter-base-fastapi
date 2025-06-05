@@ -1,3 +1,4 @@
+{% raw %}
 #!/bin/bash
 
 # 颜色定义
@@ -224,3 +225,4 @@ main() {
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
     main "$@"
 fi
+{% endraw %}
