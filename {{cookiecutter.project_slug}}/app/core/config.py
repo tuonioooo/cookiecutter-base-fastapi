@@ -104,7 +104,7 @@ class Settings(BaseSettings):
     CORS_ALLOW_HEADERS: list[str] = ["*"]
 
     # 项目基本信息
-    PROJECT_NAME: str = {{ cookiecutter.project_name }} # 项目名称，必须在环境变量中提供
+    PROJECT_NAME: str = "{{ cookiecutter.project_name }}" # 项目名称，必须在环境变量中提供
     SENTRY_DSN: HttpUrl | None = None  # Sentry错误追踪服务地址，可选
 
     # 数据库配置

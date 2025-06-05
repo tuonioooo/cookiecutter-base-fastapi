@@ -1,4 +1,4 @@
-# FastAPI Base Template
+# {{cookiecutter.project_slug}}
 
 一个基于FastAPI的基础项目模板，提供了完整的项目结构、日志配置、环境变量管理和API示例。
 
@@ -51,21 +51,22 @@
 pip install uv
 # 安装主依赖
 uv add -r requirements.txt
-```
-
-2. 开发依赖：
-
-```bash
+# 开发依赖
 uv add -r requirements-dev.txt --optional dev
 ```
 
-3. 运行应用
+2. 运行应用
 
 ```bash
-uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# powershell 激活虚拟环境
+.venv\Scripts\Activate.ps1
+# bash
+source .venv/Scripts/activate
+# 启动命令
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-4.编译依赖便于生产部署
+3.编译依赖便于生产部署
 
 ```bash
 uv pip compile pyproject.toml -o uv.linux.lock

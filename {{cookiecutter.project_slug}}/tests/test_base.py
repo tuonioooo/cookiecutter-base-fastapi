@@ -36,6 +36,8 @@ class TestBase:
                             autoflush=False, bind=engine,
                             class_=Session
                             ) 
+    
+    API_PREFIX = "/api/v1"  # API前缀
 
     @classmethod
     def get_db(cls):
@@ -59,8 +61,8 @@ class TestBase:
     def headers(self):
         """FastAPI模拟header"""
         return {
-            "X-API-KEY": "test-api-key",
-            "X-AUTH-API-KEY": "test-auth-key",
+            "YOUR-API-KEY": "test-api-key",
+            "YOUR-API-KEY": "test-auth-key",
             "Content-Type": "application/json"
         }
 
