@@ -18,7 +18,7 @@ def setup_middlewares(app: FastAPI) -> None:
     if settings.ENABLE_DEBUG_PYTEST:
         # PYTEST测试环境-跳过验证路径权限列表
         skip_paths = [
-             "/docs", "/", "/openapi.json", "/metrics", "/favicon.ico",
+             "/docs", "/", "/openapi.json", "/favicon.ico",
             # 示例api
             *get_paths(v1_router, hero.router),
         ]
@@ -26,7 +26,7 @@ def setup_middlewares(app: FastAPI) -> None:
         # 生产环境-跳过验证路径权限列表
         skip_paths = [
             #基本
-            "/docs", "/", "/openapi.json", "/metrics", "/favicon.ico",
+            "/docs", "/", "/openapi.json", "/favicon.ico",
             # 示例api
             *get_paths(v1_router, hero.router),
         ]

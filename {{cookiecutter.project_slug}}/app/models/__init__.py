@@ -1,3 +1,4 @@
-from .hero import Hero
+from .hero import Hero, HeroQo
 
-__all__ = ["Hero"]
+__all__ = ["Hero", "HeroQo"]
+

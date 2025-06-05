@@ -41,8 +41,8 @@ def read_hero(hero_id: int, session: DbSessionDep):
 
 
 @router.put("/update/{hero_id}")
-def update_hero(hero_id: int, hero: Hero, session: DbSessionDep):
-    return hero_crud.update(session, hero_id, hero)
+def update_hero(hero_id: int, hero_qo: HeroQo, session: DbSessionDep):
+    return hero_crud.update(session, hero_id, Hero(**hero_qo.model_dump(exclude_unset=True)))
 
 
 @router.delete("/delete/{hero_id}")

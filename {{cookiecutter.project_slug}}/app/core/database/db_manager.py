@@ -18,6 +18,11 @@ from urllib.parse import quote_plus
 
 from app.core.config import settings
 
+# 导入所有模型，确保它们被注册到SQLModel的元数据中
+# 这样当调用create_db_and_tables时，就能创建所有表
+# 导入整个models模块，这样所有在__init__.py中导入的模型都会被注册
+import app.models  # 这一行替代了之前的单个导入
+
 # 类型变量，用于泛型函数
 T = TypeVar('T', bound=SQLModel)
 

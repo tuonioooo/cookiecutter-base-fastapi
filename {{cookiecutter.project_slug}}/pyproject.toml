@@ -17,6 +17,7 @@ dependencies = [
     "redis>=4.2.0",
     "sqlalchemy>=2.0.41",
     "sqlmodel>=0.0.24",
+    "aiosqlite>=0.21.0",
 ]
 
 
@@ -28,4 +29,5 @@ dev = [
     "pylint>=3.0.0",
     "pytest>=8.3.5",
     "pytest-asyncio>=0.26.0",
+    "toml-to-requirements>=0.3.0",
 ]

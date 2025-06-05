@@ -13,7 +13,8 @@ v2_router = APIRouter(prefix="/v2")
 # 注册现有路由
 v1_router.include_router(hero.router)
 
-
+# 注册v1的路由
+api_router.include_router(v1_router)
 
 
 __all__ = ["router", "v1_router", "v2_router", "api_router"]

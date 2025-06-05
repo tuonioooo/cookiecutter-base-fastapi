@@ -148,7 +148,12 @@ class Settings(BaseSettings):
         构建SQLite数据库URI
         .app/ 表示数据库文件存储在应用程序根目录的 .app 子目录中，通常用于隔离数据文件
         """
-        return f"sqlite:///./app/{self.SQLITE_FILE_NAME}"
+        BASE_DIR = Path(__file__).resolve().parent.parent
+        db_path = BASE_DIR / self.SQLITE_FILE_NAME
+        # print(f"sqlite:///{db_path.as_posix()}")
+        # as_posix() 将路径转换为 POSIX 格式的字符串
+        # 这样可以确保在不同操作系统上都能正确处理路径分隔符
+        return f"sqlite:///{db_path.as_posix()}"
 
     @computed_field  # type: ignore[prop-decorator]
     @property
